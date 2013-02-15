@@ -1,9 +1,10 @@
+/*use gcc flag -pthread to compile*/
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#define LIMIT 1000000
+#define LIMIT 1000
 
 volatile int count = 0;
 pthread_mutex_t count_lock; 
@@ -12,12 +13,16 @@ void *process(void *arg)
 {
   int procid = *((char *) arg) - '0';
 
-  while (count < LIMIT) {
+  while (1) {
     pthread_mutex_lock(&count_lock);
-    count++;
+    if (count < LIMIT) {
+      count++;
+    } else {
+      pthread_mutex_unlock(&count_lock); break;
+    }
     printf("Thread %d updated count: %d\n", procid, count);
     pthread_mutex_unlock(&count_lock);
-    usleep(30);
+    usleep(1);
   }
   
   printf("Thread %d exiting..\n", procid);
