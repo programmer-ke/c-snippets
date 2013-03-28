@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define LIMIT 1000
+#define LIMIT 1000 /*maximum value to count to*/
 
-volatile int count = 0;
-pthread_mutex_t count_lock; 
+volatile int count = 0; /*variable in shared memory*/
+pthread_mutex_t count_lock;  /*mutex for count variable*/
 
 void *process(void *arg)
 {
